@@ -1,0 +1,27 @@
+[
+    {
+      "name": "Laravel",
+      "image": "php:8.2-apache",
+      "envs": [
+        { "key": "APP_ENV", "value": "production" }
+      ],
+      "volumes": [
+        { "path": "/var/www/html" }
+      ],
+      "ports": [
+        { "internalPort": 80, "publicPort": 8080 }
+      ]
+    },
+    {
+      "name": "Node.js",
+      "image": "node:18-alpine",
+      "envs": [
+        { "key": "NODE_ENV", "value": "production" }
+      ],
+      "volumes": [],
+      "ports": [
+        { "internalPort": 3000, "publicPort": 8081 }
+      ]
+    }
+  ]
+  

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mijn Template Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="p-5">
+  <h1>Eigen App Templates</h1>
+  <form id="deployForm" class="mb-4">
+    <label>Template:</label>
+    <select id="templateSelect" class="form-select mb-3"></select>
+
+    <label>App Naam:</label>
+    <input type="text" id="appName" class="form-control mb-3" required>
+
+    <button type="submit" class="btn btn-primary">Deploy</button>
+  </form>
+
+  <div id="result" class="mt-4"></div>
+
+  <script>
+    async function loadTemplates() {
+      const res = await fetch('/api/templates');
+      const templates = await res.json();
+      const select = document.getElementById('templateSelect');
+      templates.forEach(t => {
+        const option = document.createElement('option');
+        option.value = t.name;
+        option.text = t.name;
+        select.appendChild(option);
+      });
+    }
+
+    document.getElementById('deployForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const appName = document.getElementById('appName').value;
+      const templateName = document.getElementById('templateSelect').value;
+
+      const res = await fetch('/api/deploy', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ appName, templateName })
+      });
+
+      const result = await res.json();
+      document.getElementById('result').innerText = res.ok ? '✅ Deploy geslaagd!' : `❌ Fout: ${result.error}`;
+    });
+
+    loadTemplates();
+  </script>
+</body>
+</html>
